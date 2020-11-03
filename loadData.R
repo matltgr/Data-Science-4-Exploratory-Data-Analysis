@@ -2,15 +2,19 @@
 householdData <- read.csv("household_power_consumption.txt", sep = ";")
 message("Data loaded")
 
-# Date/Times management
-householdData$DateTime <- paste(householdData$Date, " ", householdData$Time)
-householdData$DateTime <- strptime(householdData$DateTime, format = "%d/%m/%Y %H:%M:%S")
-householdData[, 1:2] <- NULL
-message("Date conversion complete.")
 
 # Create subset
 begdate <- as.POSIXct("2007-02-01")
 enddate <- as.POSIXct("2007-02-03")
-householdData <- householdData[householdData$DateTime >= begdate & householdData$DateTime < enddate, ]
-householdData <- householdData[!is.na(householdData$DateTime),]
+householdData$Date <- as.POSIXct(householdData$Date, format="%d/%m/%Y")
+householdData <- householdData[householdData$Date >= begdate & householdData$Date < enddate, ]
 message("Subset created")
+
+# Create unique variable with date and time
+dateTime <- paste(householdData$Date, householdData$Time)
+householdData$DateTime <- as.POSIXct(dateTime)
+householdData$Global_active_power <- as.numeric(householdData$Global_active_power)
+message("Conversions complete.")
+
+rm(begdate)
+rm(enddate)
