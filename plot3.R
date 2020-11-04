@@ -2,6 +2,7 @@
 if(!exists("householdData")){
             source(file = "loadData.R")
 }
+Sys.setlocale(category = "LC_ALL", locale = "english")
 
 # Creating plot
 png(filename = "plot3.png")
